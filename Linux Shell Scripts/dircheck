@@ -1,0 +1,23 @@
+#! /bin/bash
+
+dirnames=$@
+for dir in $dirnames
+do
+	echo Directory: $dir
+
+	subdirectories=(`find $dir -mindepth 1 -type d | wc -l`)
+	echo "Number of subdirectories = $subdirectories"
+
+	files=(`find $dir -type f | wc -l`)
+	if (( $files > 0 ))
+	then
+		echo "Number of files = $files"
+	fi
+
+	echo "Files below zero length:"
+	find $dir -type f -size 0
+
+	echo Storage space:	
+	du -s $dir
+	echo
+done

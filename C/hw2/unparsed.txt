@@ -1,0 +1,1 @@
+This is some text that should be parsed. Symbols should be on their own separate line | , / ) ( - because they are unique.

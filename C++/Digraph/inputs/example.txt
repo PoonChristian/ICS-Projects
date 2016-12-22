@@ -1,0 +1,51 @@
+#LOCATIONS
+
+# number of locations
+5
+
+# Streets
+Vista Ct
+Gellert Blvd
+Westborough Blvd
+Callan Blvd
+Shannon Dr
+
+# ROAD SEGMENTS
+
+# number of road segments
+6
+
+# Vista Ct to Gellert Blvd
+0 1 0.6 30.0
+
+# Gellert Blvd to Vista Ct
+1 0 0.6 30.0
+
+# Gellert Blvd to Westborough Blvd
+1 2 2.1 32.4
+
+# Westborough Blvd to Callan Blvd
+2 3 2.4 45.6
+
+# Callan Blvd to Shannon Dr
+3 4 1.8 28.7
+
+# Shannon Dr to Gellert Blvd
+4 1 0.9 24.1
+
+
+# TRIPS
+
+# number of trips to analyze
+7
+
+
+# the trips
+0 4 D
+0 2 T
+4 1 D
+3 2 D
+3 2 T
+3 0 D
+2 1 T
+

@@ -1,0 +1,136 @@
+#! /bin/bash
+
+store_files ()
+{
+	if [[ -n $nameflag ]]
+	then
+		if [[ -n $typeflag ]]
+		then
+			if [[ $typeflag == f ]]
+			then
+				if [[ -f $path ]] && [[ $path =~ ^.*$nameflag$ ]]
+				then
+					files_found="$files_found $path"
+				fi
+			elif [[ $typeflag == d ]]
+			then
+				if [[ -d $path ]] && [[ $path =~ ^.*$nameflag$ ]]
+				then
+					files_found="$files_found $path"
+				fi
+			fi
+		else
+			if [[ $path =~ ^.*$nameflag$ ]]
+			then					
+				files_found="$files_found $path"
+			fi
+		fi
+	elif [[ -z $nameflag ]]	
+	then
+		if [[ -n $typeflag ]]
+		then
+			if [[ $typeflag == f ]]
+			then
+				if [[ -f $path ]]
+				then
+					files_found="$files_found $path"
+				fi
+			elif [[ $typeflag == d ]]
+			then
+				if [[ -d $path ]]
+				then
+					files_found="$files_found $path"
+				fi
+			fi
+		else
+			files_found="$files_found $path"
+		fi
+	fi
+}
+
+create_execution_command ()
+{
+	exec_string=$(echo "${@}" | sed "s@{}@$files_found@")
+}
+
+
+process_predicate ()
+{
+	nameflag=
+	typeflag=
+	printflag="false"
+	execflag="false"
+	while (( $# ))	
+	do
+		case $1 in
+			"-name" )
+				nameflag=$2
+				shift 2
+				;;
+			"-type" )
+				typeflag="$2"
+				shift 2
+				;;
+			"-print" )
+				printflag="true"
+				shift
+				;;
+			"-exec" )
+				execflag="true"
+				shift
+				create_execution_command $@
+				shift $#
+				;;
+			* )
+				shift $#
+		esac
+	done
+	store_files
+}
+
+traverse_path () 
+{
+	for path in $@
+	do	
+		process_predicate $predicates 
+		if [[ -d ${path} ]]
+		then
+			traverse_path $path/*
+		fi
+	done
+}
+
+print_files ()
+{
+	if [[ $printflag == "true" ]]
+	then
+		for file in ${files_found[*]}
+		do
+			echo $file
+		done
+	fi
+}
+
+execute_command ()
+{
+	if [[ $execflag == "true" ]]
+	then
+		`$exec_string`
+	fi
+}
+
+path=$1
+predicates=${@:2}
+files_found=
+exec_string=
+
+traverse_path "$path"
+print_files
+execute_command
+
+
+
+
+
+
+

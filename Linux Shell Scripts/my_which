@@ -1,0 +1,17 @@
+#! /bin/bash
+path=(`echo $PATH | tr ":" "\n" | sort | uniq`)
+num_args=$#
+filenames=$@
+for p in ${path[*]}
+do
+	if (( $num_args >= 1 ))
+	then
+		for filename in $filenames
+		do
+			if [[ -x $p/$filename ]]
+			then
+				echo $p/$filename
+			fi
+		done
+	fi
+done
